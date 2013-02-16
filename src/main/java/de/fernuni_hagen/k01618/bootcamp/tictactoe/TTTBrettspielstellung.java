@@ -66,4 +66,30 @@ public class TTTBrettspielstellung implements IBrettspielstellung {
         sb.append(toString());
         return sb.toString();
     }
+
+    @Override
+    public boolean fromString(final String in) {
+        if (null != in) {
+            String data = in.trim();
+            if (data.length() == (dimension * dimension)) {
+                for (int i = 0; i < dimension; ++i) {
+                    for (int j = 0; j < dimension; ++j) {
+                        int pos = ((i * dimension) + j);
+                        IZustand v = TTTZustand.N.parseValue(data
+                                .substring(pos, ++pos));
+                        if (null == v) {
+                            System.err
+                                    .println("Eingabedatenfehler an Position "
+                                            + pos);
+                            return false;
+                        }
+                        spielfeld[i][j] = v;
+                    }
+                }
+                return true;
+            }
+        }
+        System.err.println("Ungültige Eingabedaten '" + in + "'");
+        return false;
+    }
 }

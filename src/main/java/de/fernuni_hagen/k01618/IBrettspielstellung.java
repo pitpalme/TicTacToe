@@ -8,5 +8,7 @@ public interface IBrettspielstellung {
     IZustand getFeldZustand(int spalte, int zeile);
 
     String toString(boolean verbose);
+
+    boolean fromString(String in);
     // IZustand[][] auslesen();
 }

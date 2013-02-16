@@ -15,4 +15,13 @@ public enum TTTZustand implements IZustand {
     public String toString() {
         return value;
     }
+
+    @Override
+    public IZustand parseValue(final String value) {
+        for (TTTZustand v : values()) {
+            if (v.value.equals(value))
+                return v;
+        }
+        return null;
+    }
 }
