@@ -22,7 +22,6 @@ public class TTTController implements IMoveEventListener {
 
     @Override
     public void moved(final int x, final int y) {
-        System.out.println(x + ":" + y);
         ttt.setFeldZustand(x, y,
                 (z = (z == TTTZustand.X) ? TTTZustand.O : TTTZustand.X));
         view.repaint();
