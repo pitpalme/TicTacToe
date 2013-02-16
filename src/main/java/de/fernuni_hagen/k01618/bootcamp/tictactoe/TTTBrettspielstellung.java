@@ -30,8 +30,8 @@ public class TTTBrettspielstellung implements IBrettspielstellung {
             throw new IllegalArgumentException(
                     "Keine Arme, keine Kekse!!!");
 
-        if (TTTZustand.N == spielfeld[spalte][zeile]) {
-            spielfeld[spalte][zeile] = z;
+        if (TTTZustand.N == spielfeld[zeile][spalte]) {
+            spielfeld[zeile][spalte] = z;
             System.out.println(z + ": " + toString());
             return true;
         }
@@ -41,7 +41,7 @@ public class TTTBrettspielstellung implements IBrettspielstellung {
     @Override
     public IZustand getFeldZustand(final int spalte, final int zeile)
             throws ArrayIndexOutOfBoundsException {
-        return spielfeld[spalte][zeile];
+        return spielfeld[zeile][spalte];
     }
 
     @Override
