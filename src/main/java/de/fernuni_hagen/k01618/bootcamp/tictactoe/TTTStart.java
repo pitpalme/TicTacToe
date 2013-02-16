@@ -8,6 +8,7 @@ import de.fernuni_hagen.k01618.IBrettspielstellung;
 
 public class TTTStart {
     private int dim = 3;
+    private int paintFactor = 100;
 
     /**
      * @param args
@@ -19,7 +20,6 @@ public class TTTStart {
 
     public void run(final String[] args) throws Throwable {
         parseArgs(args);
-        int paintFactor = 100;
 
         IBrettspielstellung ttt = erzeugeSpielstellung(dim);
         TTTSpielfeld view = erzeugeSpielfeld(ttt, paintFactor);

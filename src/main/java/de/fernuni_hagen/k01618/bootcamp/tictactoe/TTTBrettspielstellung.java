@@ -44,18 +44,6 @@ public class TTTBrettspielstellung implements IBrettspielstellung {
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (IZustand[] spalte : spielfeld) {
-            for (IZustand feld : spalte) {
-                sb.append(feld);
-            }
-        }
-        sb.append('\n');
-        return sb.toString();
-    }
-
-    @Override
     public String toString(final boolean verbose) {
         StringBuilder sb = new StringBuilder();
         if (verbose) {
@@ -91,5 +79,17 @@ public class TTTBrettspielstellung implements IBrettspielstellung {
         }
         System.err.println("Ungültige Eingabedaten '" + in + "'");
         return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (IZustand[] spalte : spielfeld) {
+            for (IZustand feld : spalte) {
+                sb.append(feld);
+            }
+        }
+        sb.append('\n');
+        return sb.toString();
     }
 }
