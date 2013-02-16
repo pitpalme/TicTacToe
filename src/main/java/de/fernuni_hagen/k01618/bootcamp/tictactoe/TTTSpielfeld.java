@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,34 +18,31 @@ public class TTTSpielfeld extends JPanel {
     private static final long serialVersionUID = 1L;
     private Map<RenderingHints.Key, Object> renderingHints;
     private IBrettspielstellung data;
+    private int dimension;
     private double scale = 1.0;
+    private double moveX;
+    private double moveY;
 
     public TTTSpielfeld(final IBrettspielstellung ttt) {
         super();
         data = ttt;
+        dimension = ttt.getDimension();
         setBackground(Color.LIGHT_GRAY);
         setForeground(Color.BLACK);
         renderingHints = new HashMap<RenderingHints.Key, Object>(2);
         renderingHints.put(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        addComponentListener(new ComponentListener() {
+        addMouseListener(new MouseAdapter() {
             @Override
-            public void componentShown(final ComponentEvent e) {
-            }
+            public void mouseClicked(final MouseEvent e) {
 
-            @Override
-            public void componentResized(final ComponentEvent e) {
-                // System.out.println("componentResized: " + e);
-            }
-
-            @Override
-            public void componentMoved(final ComponentEvent e) {
-            }
-
-            @Override
-            public void componentHidden(final ComponentEvent e) {
-                // TODO Auto-generated method stub
-
+                int x = (int) Math
+                        .floor(((e.getPoint().getX() / scale) - moveX) / 100);
+                int y = (int) Math
+                        .floor(((e.getPoint().getY() / scale) - moveY) / 100);
+                if ((0 <= x) && (2 >= x) && (0 <= y) && (2 >= y)) {
+                    System.out.println(x + ":" + y);
+                }
             }
         });
     }
@@ -78,11 +75,11 @@ public class TTTSpielfeld extends JPanel {
     }
 
     private void drawGrid(final Graphics2D g2d) {
-        scale = Math
-                .min(getWidth() / 300.0, getHeight() / 300.0);
+        scale = Math.min(getWidth() / (dimension * 100.0), getHeight()
+                / (dimension * 100.0));
 
-        double moveX = 0.0;
-        double moveY = 0.0;
+        moveX = 0.0;
+        moveY = 0.0;
         if (getWidth() > getHeight()) {
             moveX = (double) (getWidth() - getHeight()) / 2;
         } else {
@@ -96,6 +93,7 @@ public class TTTSpielfeld extends JPanel {
 
         g2d.transform(transMove);
 
+        // TODO Dimension berücksichtigen
         // horizontal 1
         g2d.drawLine(0, 100, 300, 100);
         // horizontal 2
@@ -108,6 +106,7 @@ public class TTTSpielfeld extends JPanel {
 
     private void drawCross(final Graphics2D g, final int spalte,
             final int zeile) {
+        // TODO Dimension berücksichtigen
         int offsetX = spalte * 100;
         int offsetY = zeile * 100;
         Color orig = g.getColor();
@@ -121,6 +120,7 @@ public class TTTSpielfeld extends JPanel {
 
     private void drawCircle(final Graphics2D g, final int spalte,
             final int zeile) {
+        // TODO Dimension berücksichtigen
         Color orig = g.getColor();
         g.setColor(Color.BLUE);
         g.drawOval(10 + (spalte * 100), 10 + (zeile * 100), 80, 80);
