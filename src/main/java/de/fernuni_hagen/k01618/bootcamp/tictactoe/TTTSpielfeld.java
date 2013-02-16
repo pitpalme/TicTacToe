@@ -18,31 +18,45 @@ import de.fernuni_hagen.k01618.bootcamp.IMoveEventSource;
 
 public class TTTSpielfeld extends JPanel implements IMoveEventSource {
     private static final long serialVersionUID = 1L;
-    private Map<RenderingHints.Key, Object> renderingHints;
+    private static Map<RenderingHints.Key, Object> renderingHints;
+
     private IBrettspielstellung data;
     private int dimension;
+    private int drawFactor;
     private double scale = 1.0;
-    private double moveX;
-    private double moveY;
+    private int moveX;
+    private int moveY;
     private IMoveEventListener moveListener;
+    private final int offset10pc;
+    private final int width80pc;
+    private final int offset90pc;
 
     public TTTSpielfeld(final IBrettspielstellung ttt) {
+        this(ttt, 100);
+    }
+
+    public TTTSpielfeld(final IBrettspielstellung ttt,
+            final int paintFactor) {
         super();
         data = ttt;
         dimension = ttt.getDimension();
+
+        drawFactor = paintFactor;
+        offset10pc = (int) (drawFactor * 0.1f);
+        width80pc = (int) (drawFactor * 0.8f);
+        offset90pc = (int) (drawFactor * 0.9f);
+
         setBackground(Color.LIGHT_GRAY);
         setForeground(Color.BLACK);
-        renderingHints = new HashMap<RenderingHints.Key, Object>(2);
-        renderingHints.put(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-                int x = (int) Math
-                        .floor(((e.getPoint().getX() / scale) - moveX) / 100);
-                int y = (int) Math
-                        .floor(((e.getPoint().getY() / scale) - moveY) / 100);
-                if ((0 <= x) && (2 >= x) && (0 <= y) && (2 >= y)) {
+                int x = (int) Math.floor((e.getPoint().getX() - moveX)
+                        / scale / drawFactor);
+                int y = (int) Math.floor((e.getPoint().getY() - moveY)
+                        / scale / drawFactor);
+                if ((0 <= x) && (dimension > x) && (0 <= y)
+                        && (dimension > y)) {
                     if (null != moveListener) {
                         moveListener.moved(x, y);
                     }
@@ -63,8 +77,8 @@ public class TTTSpielfeld extends JPanel implements IMoveEventSource {
         g2d.setRenderingHints(renderingHints);
 
         drawGrid(g2d);
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
+        for (int i = 0; i < dimension; ++i) {
+            for (int j = 0; j < dimension; ++j) {
                 TTTZustand zustand = (TTTZustand) data.getFeldZustand(
                         i, j);
                 switch (zustand) {
@@ -77,62 +91,76 @@ public class TTTSpielfeld extends JPanel implements IMoveEventSource {
                     break;
                 default:
                     throw new IllegalStateException(
-                            "Was'n das für'n Scheiss???");
+                            "Was'n das für'n komischer Wert???");
                 }
             }
         }
     }
 
     private void drawGrid(final Graphics2D g2d) {
-        scale = Math.min(getWidth() / (dimension * 100.0), getHeight()
-                / (dimension * 100.0));
+        setupTransformation(g2d);
 
-        moveX = 0.0;
-        moveY = 0.0;
-        if (getWidth() > getHeight()) {
-            moveX = (double) (getWidth() - getHeight()) / 2;
-        } else {
-            moveY = (double) (getHeight() - getWidth()) / 2;
+        // draw grid lines
+        for (int i = 1; i < dimension; ++i) {
+            g2d.drawLine(0, i * drawFactor, dimension * drawFactor, i
+                    * drawFactor);
+            g2d.drawLine(i * drawFactor, 0, i * drawFactor, dimension
+                    * drawFactor);
         }
-        AffineTransform transMove = AffineTransform
-                .getTranslateInstance(moveX, moveY);
+        // draw outer frame line
+        g2d.drawLine(0, 0, dimension * drawFactor, 0);
+        g2d.drawLine(0, 0, 0, dimension * drawFactor);
+        g2d.drawLine(dimension * drawFactor, dimension * drawFactor,
+                dimension * drawFactor, 0);
+        g2d.drawLine(dimension * drawFactor, dimension * drawFactor, 0,
+                dimension * drawFactor);
+    }
+
+    private void setupTransformation(final Graphics2D g2d) {
+        scale = Math.min(getWidth() / (float) (dimension * drawFactor),
+                getHeight() / (float) (dimension * drawFactor));
+
+        moveX = 0;
+        moveY = 0;
+        if (getWidth() > getHeight()) {
+            moveX = (getWidth() - getHeight()) / 2;
+        } else {
+            moveY = (getHeight() - getWidth()) / 2;
+        }
         AffineTransform transScale = AffineTransform.getScaleInstance(
                 scale, scale);
+        AffineTransform transMove = AffineTransform
+                .getTranslateInstance(moveX, moveY);
+
         transMove.concatenate(transScale);
-
         g2d.transform(transMove);
-
-        // TODO Dimension berücksichtigen
-        // horizontal 1
-        g2d.drawLine(0, 100, 300, 100);
-        // horizontal 2
-        g2d.drawLine(0, 200, 300, 200);
-        // vertikal 1
-        g2d.drawLine(100, 0, 100, 300);
-        // vertikal 2
-        g2d.drawLine(200, 0, 200, 300);
     }
 
     private void drawCross(final Graphics2D g, final int spalte,
             final int zeile) {
-        // TODO Dimension berücksichtigen
-        int offsetX = spalte * 100;
-        int offsetY = zeile * 100;
+        final int offsetX = spalte * drawFactor;
+        final int offsetY = zeile * drawFactor;
         Color orig = g.getColor();
         g.setColor(Color.RED);
-        g.drawLine(10 + offsetX, 10 + offsetY, 90 + offsetX,
-                90 + offsetY);
-        g.drawLine(90 + offsetX, 10 + offsetY, 10 + offsetX,
-                90 + offsetY);
+        g.drawLine(10 + offsetX, offset10pc + offsetY, offset90pc
+                + offsetX, offset90pc + offsetY);
+        g.drawLine(offset90pc + offsetX, offset10pc + offsetY,
+                offset10pc + offsetX, offset90pc + offsetY);
         g.setColor(orig);
     }
 
     private void drawCircle(final Graphics2D g, final int spalte,
             final int zeile) {
-        // TODO Dimension berücksichtigen
         Color orig = g.getColor();
         g.setColor(Color.BLUE);
-        g.drawOval(10 + (spalte * 100), 10 + (zeile * 100), 80, 80);
+        g.drawOval(offset10pc + (spalte * drawFactor), offset10pc
+                + (zeile * drawFactor), width80pc, width80pc);
         g.setColor(orig);
+    }
+
+    static {
+        renderingHints = new HashMap<RenderingHints.Key, Object>(1);
+        renderingHints.put(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
     }
 }

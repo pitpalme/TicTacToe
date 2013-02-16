@@ -17,13 +17,17 @@ public class TTTStart {
     }
 
     public void run(final String[] args) throws Throwable {
-        IBrettspielstellung ttt = erzeugeSpielstellung();
-        TTTSpielfeld view = erzeugeSpielfeld(ttt);
+        int dim = 4;
+        int paintFactor = 100;
+
+        IBrettspielstellung ttt = erzeugeSpielstellung(dim);
+        TTTSpielfeld view = erzeugeSpielfeld(ttt, paintFactor);
 
         JFrame mainFrame = new JFrame("Tic, Trick und Track");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
-        mainFrame.setMinimumSize(new Dimension(300, 300));
+        mainFrame.setMinimumSize(new Dimension(dim * paintFactor, dim
+                * paintFactor));
         mainFrame.add(view);
         mainFrame.pack();
         mainFrame.setVisible(true);
@@ -32,12 +36,13 @@ public class TTTStart {
         new TTTController(ttt, view, view);
     }
 
-    private TTTSpielfeld erzeugeSpielfeld(final IBrettspielstellung ttt) {
-        TTTSpielfeld comp = new TTTSpielfeld(ttt);
+    private TTTSpielfeld erzeugeSpielfeld(
+            final IBrettspielstellung ttt, final int paintFactor) {
+        TTTSpielfeld comp = new TTTSpielfeld(ttt, paintFactor);
         return comp;
     }
 
-    private IBrettspielstellung erzeugeSpielstellung() {
-        return new TTTBrettspielstellung(3);
+    private IBrettspielstellung erzeugeSpielstellung(final int dimension) {
+        return new TTTBrettspielstellung(dimension);
     }
 }
