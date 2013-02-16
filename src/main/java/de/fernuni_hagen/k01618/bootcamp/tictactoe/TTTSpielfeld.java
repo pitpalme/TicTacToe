@@ -15,8 +15,10 @@ import javax.swing.JPanel;
 import de.fernuni_hagen.k01618.IBrettspielstellung;
 import de.fernuni_hagen.k01618.IMoveEventListener;
 import de.fernuni_hagen.k01618.IMoveEventSource;
+import de.fernuni_hagen.k01618.ISpielfeld;
 
-public class TTTSpielfeld extends JPanel implements IMoveEventSource {
+public class TTTSpielfeld extends JPanel implements ISpielfeld,
+        IMoveEventSource {
     private static final long serialVersionUID = 1L;
     private static Map<RenderingHints.Key, Object> renderingHints;
 
@@ -63,6 +65,11 @@ public class TTTSpielfeld extends JPanel implements IMoveEventSource {
                 }
             }
         });
+    }
+
+    @Override
+    public void update() {
+        repaint();
     }
 
     @Override
