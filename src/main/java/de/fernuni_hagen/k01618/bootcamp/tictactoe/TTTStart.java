@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import de.fernuni_hagen.k01618.IBrettspielstellung;
 
 public class TTTStart {
+    private int dim = 3;
 
     /**
      * @param args
@@ -17,7 +18,7 @@ public class TTTStart {
     }
 
     public void run(final String[] args) throws Throwable {
-        int dim = 4;
+        parseArgs(args);
         int paintFactor = 100;
 
         IBrettspielstellung ttt = erzeugeSpielstellung(dim);
@@ -44,5 +45,18 @@ public class TTTStart {
 
     private IBrettspielstellung erzeugeSpielstellung(final int dimension) {
         return new TTTBrettspielstellung(dimension);
+    }
+
+    private void parseArgs(final String[] args) {
+        if (null != args) {
+            if (null != args[0]) {
+                try {
+                    dim = Integer.parseInt(args[0]);
+                } catch (NumberFormatException e) {
+                    System.err
+                            .println("Erstes Argument muss eine Zahl (=Dimension) sein.");
+                }
+            }
+        }
     }
 }
