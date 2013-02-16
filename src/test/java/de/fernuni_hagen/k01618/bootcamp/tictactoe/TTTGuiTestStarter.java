@@ -1,8 +1,11 @@
 package de.fernuni_hagen.k01618.bootcamp.tictactoe;
 
-import javax.swing.JButton;
+import java.awt.Dimension;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+
+import de.fernuni_hagen.k01618.IBrettspielstellung;
 
 public class TTTGuiTestStarter extends JFrame {
 
@@ -14,19 +17,25 @@ public class TTTGuiTestStarter extends JFrame {
     public TTTGuiTestStarter(final JComponent testObjekt) {
         super();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(300, 300);
         setLocationRelativeTo(null);
-
+        setMinimumSize(new Dimension(300, 300));
         add(testObjekt);
+        pack();
     }
 
     /**
      * @param args
+     * @throws Throwable
      */
-    public static void main(final String[] args) {
-        JButton jb = new JButton("TEST ME");
+    public static void main(final String[] args) throws Throwable {
+        IBrettspielstellung ttt = new TTTBrettspielstellung(3);
+        JComponent comp = new TTTSpielfeld(ttt);
 
-        new TTTGuiTestStarter(jb).setVisible(true);
+        new TTTGuiTestStarter(comp).setVisible(true);
+        Thread.sleep(1000l);
+        ttt.setFeldZustand(0, 0, TTTZustand.X);
+        ttt.setFeldZustand(1, 1, TTTZustand.O);
+        comp.repaint();
     }
 
 }
