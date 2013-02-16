@@ -13,8 +13,8 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import de.fernuni_hagen.k01618.IBrettspielstellung;
-import de.fernuni_hagen.k01618.bootcamp.IMoveEventListener;
-import de.fernuni_hagen.k01618.bootcamp.IMoveEventSource;
+import de.fernuni_hagen.k01618.IMoveEventListener;
+import de.fernuni_hagen.k01618.IMoveEventSource;
 
 public class TTTSpielfeld extends JPanel implements IMoveEventSource {
     private static final long serialVersionUID = 1L;
