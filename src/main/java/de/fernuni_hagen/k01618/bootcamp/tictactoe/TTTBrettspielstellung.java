@@ -1,5 +1,8 @@
 package de.fernuni_hagen.k01618.bootcamp.tictactoe;
 
+import de.fernuni_hagen.k01618.IBrettspielstellung;
+import de.fernuni_hagen.k01618.IZustand;
+
 public class TTTBrettspielstellung implements IBrettspielstellung {
     private final int dimension;
     private IZustand[][] spielfeld;
