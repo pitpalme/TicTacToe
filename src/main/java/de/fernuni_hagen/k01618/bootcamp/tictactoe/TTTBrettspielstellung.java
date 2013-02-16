@@ -32,6 +32,7 @@ public class TTTBrettspielstellung implements IBrettspielstellung {
 
         if (TTTZustand.N == spielfeld[spalte][zeile]) {
             spielfeld[spalte][zeile] = z;
+            System.out.println(z + ": " + toString());
             return true;
         }
         return false;

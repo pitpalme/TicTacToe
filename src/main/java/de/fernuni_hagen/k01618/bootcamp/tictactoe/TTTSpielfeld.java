@@ -13,8 +13,10 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import de.fernuni_hagen.k01618.IBrettspielstellung;
+import de.fernuni_hagen.k01618.bootcamp.IMoveEventListener;
+import de.fernuni_hagen.k01618.bootcamp.IMoveEventSource;
 
-public class TTTSpielfeld extends JPanel {
+public class TTTSpielfeld extends JPanel implements IMoveEventSource {
     private static final long serialVersionUID = 1L;
     private Map<RenderingHints.Key, Object> renderingHints;
     private IBrettspielstellung data;
@@ -22,6 +24,7 @@ public class TTTSpielfeld extends JPanel {
     private double scale = 1.0;
     private double moveX;
     private double moveY;
+    private IMoveEventListener moveListener;
 
     public TTTSpielfeld(final IBrettspielstellung ttt) {
         super();
@@ -35,16 +38,22 @@ public class TTTSpielfeld extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-
                 int x = (int) Math
                         .floor(((e.getPoint().getX() / scale) - moveX) / 100);
                 int y = (int) Math
                         .floor(((e.getPoint().getY() / scale) - moveY) / 100);
                 if ((0 <= x) && (2 >= x) && (0 <= y) && (2 >= y)) {
-                    System.out.println(x + ":" + y);
+                    if (null != moveListener) {
+                        moveListener.moved(x, y);
+                    }
                 }
             }
         });
+    }
+
+    @Override
+    public void setMoveEventListener(final IMoveEventListener listener) {
+        moveListener = listener;
     }
 
     @Override
@@ -113,7 +122,7 @@ public class TTTSpielfeld extends JPanel {
         g.setColor(Color.RED);
         g.drawLine(10 + offsetX, 10 + offsetY, 90 + offsetX,
                 90 + offsetY);
-        g.drawLine(90 + offsetX, 10 + offsetX, 10 + offsetX,
+        g.drawLine(90 + offsetX, 10 + offsetY, 10 + offsetX,
                 90 + offsetY);
         g.setColor(orig);
     }
@@ -126,8 +135,4 @@ public class TTTSpielfeld extends JPanel {
         g.drawOval(10 + (spalte * 100), 10 + (zeile * 100), 80, 80);
         g.setColor(orig);
     }
-
-    private void transformGraphcisToUserCoordinateSystem() {
-    }
-
 }

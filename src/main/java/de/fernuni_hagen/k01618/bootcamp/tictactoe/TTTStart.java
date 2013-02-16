@@ -2,7 +2,6 @@ package de.fernuni_hagen.k01618.bootcamp.tictactoe;
 
 import java.awt.Dimension;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import de.fernuni_hagen.k01618.IBrettspielstellung;
@@ -17,26 +16,28 @@ public class TTTStart {
         new TTTStart().run(args);
     }
 
-    private void run(final String[] args) throws Throwable {
+    public void run(final String[] args) throws Throwable {
+        IBrettspielstellung ttt = erzeugeSpielstellung();
+        TTTSpielfeld view = erzeugeSpielfeld(ttt);
+
         JFrame mainFrame = new JFrame("Tic, Trick und Track");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setMinimumSize(new Dimension(300, 300));
-        IBrettspielstellung ttt = erzeugeSpielstellung();
-        mainFrame.add(erzeugeSpielfeld(ttt));
+        mainFrame.add(view);
         mainFrame.pack();
-
         mainFrame.setVisible(true);
         mainFrame.repaint();
+
+        new TTTController(ttt, view, view);
+    }
+
+    private TTTSpielfeld erzeugeSpielfeld(final IBrettspielstellung ttt) {
+        TTTSpielfeld comp = new TTTSpielfeld(ttt);
+        return comp;
     }
 
     private IBrettspielstellung erzeugeSpielstellung() {
         return new TTTBrettspielstellung(3);
-    }
-
-    private JComponent erzeugeSpielfeld(
-            final IBrettspielstellung ttt) {
-        JComponent comp = new TTTSpielfeld(ttt);
-        return comp;
     }
 }
