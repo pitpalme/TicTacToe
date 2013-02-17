@@ -1,13 +1,19 @@
 package de.fernuni_hagen.k01618;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 
 /**
  * Ein Exemplar dieser Klasse repräsentiert eine Kommunikationsschnittstelle zu einem Server, der
  * eine Anfrage in Form von Text engegennimmt, mit einer Nachricht in Form von Text antwortet und
  * dann die Verbindung beendet.
- * 
+ *
  * @author Michael Paap
  */
 public class Communicator {
@@ -21,7 +27,7 @@ public class Communicator {
     /**
      * Erstellt ein Exemplar dieser Klasse für die Kommunikation mit dem übergebenen Server, Port
      * und Encoding.
-     * 
+     *
      * @param server
      *            Server, der benutzt werden soll, als auflösbarer Servername oder IP-Adresse
      * @param port
@@ -29,15 +35,16 @@ public class Communicator {
      * @param charsetName
      *            der Name des zu verwendende Encodings, z.B. "UTF-8"
      */
-    Communicator(String server, int port, String encoding) {
+    public Communicator(final String server, final int port,
+            final String encoding) {
         this.server = server;
         this.port = port;
-        this.charsetName = encoding;
+        charsetName = encoding;
     }
 
     /**
      * Sendet eine Nachricht an den Server und liefert die Antwort als String.
-     * 
+     *
      * @param message
      *            Nachricht die an den Server gesendet werden soll
      * @return die vom Server gelesene Antwort
@@ -46,7 +53,7 @@ public class Communicator {
      *             auftritt. Die ursächliche Exception wird mitgegeben und kann beim
      *             CommunicatorException-Exemplar mit getCause() abgefragt werden.
      */
-    public String communicate(String message) throws CommunicatorException {
+    public String communicate(final String message) throws CommunicatorException {
         Socket socket = null;
         try {
             socket = connectToServer();
@@ -66,7 +73,7 @@ public class Communicator {
         }
     }
 
-    private void sendRequestToServer(String message, Socket socket) throws CommunicatorException {
+    private void sendRequestToServer(final String message, final Socket socket) throws CommunicatorException {
         try {
             OutputStream os = socket.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os, charsetName);
@@ -79,7 +86,7 @@ public class Communicator {
         }
     }
 
-    private String readResponseFromServer(Socket socket) throws CommunicatorException {
+    private String readResponseFromServer(final Socket socket) throws CommunicatorException {
         try {
             InputStream in = socket.getInputStream();
             InputStreamReader isr = new InputStreamReader(in, charsetName);
@@ -96,7 +103,7 @@ public class Communicator {
         }
     }
 
-    private void closeSocket(Socket socket) {
+    private void closeSocket(final Socket socket) {
         try {
             if (socket != null) {
                 socket.close();

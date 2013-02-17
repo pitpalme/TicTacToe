@@ -39,7 +39,7 @@ public class TTTStart {
 
         // new TTTController(ttt, view, view);
         ISpieler[] spieler = new ISpieler[] { new TTTMenschSpieler(),
-                new TTTNetzwerkSpieler() };
+                new TTTNetzwerkSpieler("localhost") };
         view.addMoveEventListener((IMoveEventListener) spieler[0]);
 
         new TTTPartieController(ttt, view, spieler).run();

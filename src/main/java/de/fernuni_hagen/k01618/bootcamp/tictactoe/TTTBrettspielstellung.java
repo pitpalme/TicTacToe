@@ -51,7 +51,7 @@ public class TTTBrettspielstellung implements IBrettspielstellung {
                     .append(": dimension=").append(dimension)
                     .append(", spielfeld=");
         }
-        sb.append(toString());
+        sb.append(toString()).append('\n');
         return sb.toString();
     }
 
@@ -89,7 +89,6 @@ public class TTTBrettspielstellung implements IBrettspielstellung {
                 sb.append(feld);
             }
         }
-        sb.append('\n');
         return sb.toString();
     }
 }

@@ -16,7 +16,7 @@ public class TTTMenschSpieler implements ISpieler, IMoveEventListener {
     }
 
     @Override
-    public synchronized Point holeZug() {
+    public synchronized Point holeZug(final String stellung) {
         return letzterZug;
     }
 

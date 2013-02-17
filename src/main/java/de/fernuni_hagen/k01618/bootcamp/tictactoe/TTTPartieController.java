@@ -4,6 +4,7 @@ import de.fernuni_hagen.k01618.IBrettspielstellung;
 import de.fernuni_hagen.k01618.ISpieler;
 import de.fernuni_hagen.k01618.ISpielfeld;
 import de.fernuni_hagen.k01618.IZustand;
+import de.fernuni_hagen.k01618.PlayerException;
 import de.fernuni_hagen.k01618.Point;
 
 public class TTTPartieController {
@@ -23,22 +24,25 @@ public class TTTPartieController {
     public void run() {
         for (int i = 0; i < (model.getDimension() * model
                 .getDimension()); ++i) {
-            System.out.println("TTTPartieController.run(): " + i);
             ISpieler aktuellerSpieler = spieler[i % spieler.length];
             nextPlayerVal = (nextPlayerVal == TTTZustand.X) ? TTTZustand.O
                     : TTTZustand.X;
             Point zug = null;
             aktuellerSpieler.leereZug();
-            while (null == (zug = aktuellerSpieler.holeZug())) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    throw new IllegalStateException(e);
+            try {
+                while (null == (zug = aktuellerSpieler.holeZug(model
+                        .toString()))) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        throw new IllegalStateException(e);
+                    }
                 }
+            } catch (PlayerException e) {
+                throw new IllegalStateException(e);
             }
             model.setFeldZustand(zug.spalte, zug.zeile, nextPlayerVal);
             view.update();
-            System.out.println("TTTPartieController.run() Ende: " + i);
         }
     }
 }
