@@ -30,7 +30,7 @@ public class TTTStart {
         JFrame mainFrame = new JFrame("Tic, Trick und Track");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
-        mainFrame.setMinimumSize(new Dimension(dim * paintFactor, dim
+        mainFrame.setPreferredSize(new Dimension(dim * paintFactor, dim
                 * paintFactor));
         mainFrame.add(view);
         mainFrame.pack();

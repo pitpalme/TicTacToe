@@ -18,7 +18,7 @@ public class TTTGuiTestStarter extends JFrame {
         super();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setMinimumSize(new Dimension(300, 300));
+        setPreferredSize(new Dimension(300, 300));
         add(testObjekt);
         pack();
     }
