@@ -7,7 +7,7 @@ import de.fernuni_hagen.k01618.IZustand;
 import de.fernuni_hagen.k01618.PlayerException;
 import de.fernuni_hagen.k01618.Point;
 
-public class TTTPartieController {
+public class TTTPartieController implements Runnable {
     private IBrettspielstellung model;
     private ISpielfeld view;
     private ISpieler[] spieler;
@@ -21,6 +21,7 @@ public class TTTPartieController {
         nextPlayerVal = TTTZustand.N;
     }
 
+    @Override
     public void run() {
         for (int i = 0; i < (model.getDimension() * model
                 .getDimension()); ++i) {
