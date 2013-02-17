@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 import de.fernuni_hagen.k01618.IBrettspielstellung;
+import de.fernuni_hagen.k01618.IMoveEventListener;
+import de.fernuni_hagen.k01618.ISpieler;
 
 public class TTTStart {
     private int dim = 3;
@@ -17,6 +19,7 @@ public class TTTStart {
     public static void main(final String[] args) throws Throwable {
         new TTTStart().run(args);
     }
+
 
     public void run(final String[] args) throws Throwable {
         parseArgs(args);
@@ -34,7 +37,12 @@ public class TTTStart {
         mainFrame.setVisible(true);
         mainFrame.repaint();
 
-        new TTTController(ttt, view, view);
+        // new TTTController(ttt, view, view);
+        ISpieler[] spieler = new ISpieler[] { new TTTMenschSpieler(),
+                new TTTNetzwerkSpieler() };
+        view.addMoveEventListener((IMoveEventListener) spieler[0]);
+
+        new TTTPartieController(ttt, view, spieler).run();
     }
 
     private TTTSpielfeld erzeugeSpielfeld(
