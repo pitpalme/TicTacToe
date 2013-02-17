@@ -7,10 +7,11 @@ import de.fernuni_hagen.k01618.PlayerException;
 import de.fernuni_hagen.k01618.Point;
 
 public class TTTNetzwerkSpieler implements ISpieler {
+    private static final String ENCODING = "utf-8";
     Communicator comm;
 
     public TTTNetzwerkSpieler(final String server) {
-        comm = new Communicator(server, 7890, "utf-8");
+        comm = new Communicator(server, 7890, ENCODING);
     }
 
     @Override
@@ -24,19 +25,16 @@ public class TTTNetzwerkSpieler implements ISpieler {
         try {
             response = comm.communicate(stellung + "\n");
             if (null == response)
-                throw new PlayerException(
-                        "Keine Antwort, kein Spiel!!!");
+                throw new PlayerException("Keine Antwort - kein Spiel!");
             try {
                 int val = Integer.parseInt(response.trim()) - 1;
                 return new Point(val % dim, val / dim);
             } catch (NumberFormatException e) {
-                throw new PlayerException("Antwort ist Schrott!!!: "
+                throw new PlayerException("Antwort keine Zahl: "
                         + response, e);
             }
         } catch (CommunicatorException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
+            throw new PlayerException("Kommunikationsfehler", e);
         }
     }
-
 }
