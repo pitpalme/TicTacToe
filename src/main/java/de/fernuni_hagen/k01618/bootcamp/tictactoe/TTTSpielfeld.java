@@ -170,8 +170,8 @@ public class TTTSpielfeld extends JPanel implements ISpielfeld,
         final int offsetY = zeile * drawFactor;
         Color orig = g.getColor();
         g.setColor(Color.RED);
-        g.drawLine(10 + offsetX, offset10pc + offsetY, offset90pc
-                + offsetX, offset90pc + offsetY);
+        g.drawLine(offset10pc + offsetX, offset10pc + offsetY,
+                offset90pc + offsetX, offset90pc + offsetY);
         g.drawLine(offset90pc + offsetX, offset10pc + offsetY,
                 offset10pc + offsetX, offset90pc + offsetY);
         g.setColor(orig);
