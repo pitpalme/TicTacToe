@@ -18,9 +18,12 @@ public enum TTTZustand implements IZustand {
 
     @Override
     public IZustand parseValue(final String value) {
-        for (TTTZustand v : values()) {
-            if (v.value.equals(value))
-                return v;
+        if (null != value) {
+            String lcValue = value.trim().toLowerCase();
+            for (TTTZustand v : values()) {
+                if (v.value.equals(lcValue))
+                    return v;
+            }
         }
         return null;
     }
