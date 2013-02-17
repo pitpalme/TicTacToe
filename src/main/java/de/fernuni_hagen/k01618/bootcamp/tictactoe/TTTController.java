@@ -18,7 +18,7 @@ public class TTTController implements IMoveEventListener {
         view = fasel;
         eventSource = blub;
         z = TTTZustand.N;
-        eventSource.setMoveEventListener(this);
+        eventSource.addMoveEventListener(this);
     }
 
     @Override

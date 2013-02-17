@@ -8,6 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -28,7 +31,7 @@ public class TTTSpielfeld extends JPanel implements ISpielfeld,
     private double scale = 1.0;
     private int moveX;
     private int moveY;
-    private IMoveEventListener moveListener;
+    private List<IMoveEventListener> moveListener;
     private final int offset10pc;
     private final int width80pc;
     private final int offset90pc;
@@ -40,6 +43,7 @@ public class TTTSpielfeld extends JPanel implements ISpielfeld,
     public TTTSpielfeld(final IBrettspielstellung ttt,
             final int paintFactor) {
         super();
+        moveListener = new LinkedList<IMoveEventListener>();
         data = ttt;
         dimension = ttt.getDimension();
 
@@ -59,8 +63,8 @@ public class TTTSpielfeld extends JPanel implements ISpielfeld,
                         / scale / drawFactor);
                 if ((0 <= x) && (dimension > x) && (0 <= y)
                         && (dimension > y)) {
-                    if (null != moveListener) {
-                        moveListener.moved(x, y);
+                    for (IMoveEventListener listener : moveListener) {
+                        listener.moved(x, y);
                     }
                 }
             }
@@ -73,8 +77,25 @@ public class TTTSpielfeld extends JPanel implements ISpielfeld,
     }
 
     @Override
-    public void setMoveEventListener(final IMoveEventListener listener) {
-        moveListener = listener;
+    public void addMoveEventListener(final IMoveEventListener listener) {
+        if (null != listener) {
+            moveListener.add(listener);
+        }
+    }
+
+    @Override
+    public void removeMoveEventListener(
+            final IMoveEventListener listener) {
+        if (null != listener) {
+            ListIterator<IMoveEventListener> it = moveListener
+                    .listIterator();
+            while (it.hasNext()) {
+                IMoveEventListener tmp = it.next();
+                if (tmp == listener) {
+                    it.remove();
+                }
+            }
+        }
     }
 
     @Override
